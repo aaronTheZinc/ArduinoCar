@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, Dimensions, StyleSheet } from 'react-native';
+import { View, Dimensions, StyleSheet, Pressable, Text } from 'react-native';
 import { MultiTouchView } from 'expo-multi-touch';
 import Pad from './components/Pad';
 import TouchVisualizer from './components/TouchVisualizer';
@@ -89,6 +89,10 @@ export default class App extends Component {
     }
   };
 
+  onBrake() {
+    socket.emit("brake", {  })
+  }
+
   updateWithPad = (touching = true) => {
     if (!this.pad) {
       return;
@@ -99,7 +103,11 @@ export default class App extends Component {
       speed = this.pad.speed;
       angle = this.pad.angle;
     }
+    if(speed === 0) {
+      socket.emit("stop", { });
+    }else {
     socket.emit("direction", { angle, speed })
+  }
     console.log('pad', speed, angle);
   };
 
@@ -126,6 +134,9 @@ export default class App extends Component {
 
     return (
       <View style={{ flex: 1 }}>
+                    <Pressable onPress={() => socket.emit("brake", {msg: "breaking..."})} style={styles.brakePedal}>
+              <Text style={{color: "white"}}>Brake</Text>
+            </Pressable>
         <MultiTouchView style={{ flex: 1 }} {...this.touchProps}>
           <View style={styles.container}>
             <TouchVisualizer touches={touches} />
@@ -151,4 +162,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     backgroundColor: 'yellow',
   },
+  brakePedal: {
+    color: "white",
+    backgroundColor: "black",
+    width: "100%",
+    height: "30%",
+  }
 });

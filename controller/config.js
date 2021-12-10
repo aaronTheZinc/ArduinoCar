@@ -1,1 +1,1 @@
-export const SocketEndpoint = "https://bd31-2600-1702-11f0-21a0-fddb-22a7-fc65-589e.ngrok.io/"
+export const SocketEndpoint = "https://ff31-2607-fb90-982e-d6a1-446f-435c-cf91-1ebf.ngrok.io"
